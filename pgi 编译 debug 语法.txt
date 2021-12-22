@@ -1,0 +1,51 @@
+PGI 18.10
+PGI$ cd code
+bash: cd: code: No such file or directory
+PGI$ cd F:
+PGI$ cd code
+PGI$ ls
+ACM  C++程序设计  LeetCode  OpenACC  数据结构与算法  超算俱乐部队内赛.pdf
+PGI$ cd OpenACC/
+PGI$ ls
+HelloWorld
+PGI$ cd HelloWorld/
+PGI$ ls
+Debug  HelloWorld  HelloWorld.sln
+PGI$ cd HelloWorld
+PGI$ ls
+Debug         HelloWorld.vcxproj          HelloWorld.vcxproj.user  test.exe
+HelloWorld.c  HelloWorld.vcxproj.filters  test.dwf                 test.pdb
+PGI$ pgdbg ./test.exe
+PGI$
+PGI$
+PGI$
+PGI$
+PGI$ pgcc -acc -Minfo -g -o test.exe ./HelloWorld.c
+main:
+     12, Generating implicit copyin(b[:])
+         Generating implicit copyout(c[:])
+         Generating implicit copyin(a[:])
+     15, Loop is parallelizable
+         Accelerator kernel generated
+         Generating Tesla code
+         15, #pragma acc loop gang, vector(128) /* blockIdx.x threadIdx.x */
+PGI$ pgdbg ./test.exe
+pgdbg-Fatal-Executable file ./test.exe not found on PATH
+
+PGI$ pwd
+/f/code/OpenACC/HelloWorld/HelloWorld
+PGI$ ls
+Debug  HelloWorld.c  HelloWorld.vcxproj  HelloWorld.vcxproj.filters  HelloWorld.vcxproj.user  test.dwf  test.pdb
+PGI$ pgcc -acc -Minfo -g -o test ./HelloWorld.c
+main:
+     12, Generating implicit copyin(b[:])
+         Generating implicit copyout(c[:])
+         Generating implicit copyin(a[:])
+     15, Loop is parallelizable
+         Accelerator kernel generated
+         Generating Tesla code
+         15, #pragma acc loop gang, vector(128) /* blockIdx.x threadIdx.x */
+PGI$ pgdbg ./test.exe
+PGI$
+
+ 观察运行时采用的参数：export PGI_ACC_NOTIFY=1
